@@ -2,7 +2,8 @@
 
 import MainHeader from "./includes/MainHeader"
 import TopMenu from "./includes/TopMenu"
-
+import SubMenu from './includes/SubMenu'
+import Footer from "./includes/Footer"
 export default function MainLayout({children}) {
     return (
         <>
@@ -10,6 +11,11 @@ export default function MainLayout({children}) {
                 <div>
                     <TopMenu/>
                     <MainHeader/>
+                    <SubMenu/>
+
+                    {children}
+
+                    <Footer/>
                 </div>
                 
             </div>

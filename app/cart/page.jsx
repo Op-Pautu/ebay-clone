@@ -40,6 +40,7 @@ export default function Cart() {
                         </div>
 
                         <div className="border-b border-gray-300"></div>
+                        
                         <div className="flex items-center justify-between mt-4 mb-1 text-lg font-semibold">
                             <span>Subtotals</span>
                             <span>$12.99</span>

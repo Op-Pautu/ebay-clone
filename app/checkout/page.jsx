@@ -22,9 +22,9 @@ export default function Checkout() {
           <div className="relative flex items-baseline gap-4 justify-between mx-auto w-full">
             <div className="w-[65%]">
               <div className="bg-white rounded-lg p-4 border">
-                <div className="text-xl font-semibold mb-2">
+                <p className="text-xl font-semibold mb-2">
                   Shipping Address
-                </div>
+                </p>
 
                 <div>
                   <ul className="text-sm mt-2">

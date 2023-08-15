@@ -1,76 +1,74 @@
 "use client"
 
+import { createContext, useState, useEffect, useContext } from "react";
+import { useRouter } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
-import { useRouter } from "next/navigation"
-import { createContext, useContext, useEffect, useState } from "react"
 
-const Context = createContext()
+const Context = createContext();
 
 const Provider = ({ children }) => {
-    const router = useRouter();
+  const router = useRouter();
 
-    const [user, setUser] = useState(null)
-    const [id, setId] = useState(null)
-    const [email, setEmail] = useState(null)
-    const [name, setName] = useState(null)
-    const [picture, setPicture] = useState(null)
+  const [user, setUser] = useState(null);
+  const [id, setId] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [name, setName] = useState(null);
+  const [picture, setPicture] = useState(null);
 
-    const supabaseClient = createClientComponentClient()
+  const supabaseClient = createClientComponentClient()
 
-    const getCurrentSession = async () => {
-        const res = await supabaseClient.auth.getSession()
+  const getCurrentSession = async () => {
+    const res = await supabaseClient.auth.getSession()
+    if (res && res.data.session) { 
+      return res.data.session
+    } 
+    clearUser()
+    return null
+  }
 
-        if (res && res.data.session) {
-            return res.data.session
-        }
-        clearUser()
-        return null
+  const getCurrentUser = async () => {
+    if (id) return
+    
+    const res = await supabaseClient.auth.getUser()
+    if (res && res.data.user) {
+
+      const theUser = res.data.user
+
+      setUser(theUser)
+      setId(theUser.id)
+      setEmail(theUser.email)
+      setName(theUser.identities[0].identity_data.name)
+      setPicture(theUser.identities[0].identity_data.picture)
     }
+  }
 
-    const getCurrentUser = async() => {
-        if (id) return
-
-        const res = await supabaseClient.auth.getUser()
-
-        if (res && res.data.user) {
-            const theUser = res.data.user
-
-            setUser(theUser)
-            setId(theUser.id)
-            setEmail(theUser.email)
-            setName(theUser.identities[0].identity_data.name)
-            setPicture(theUser.identities[0].identity_data.picture)
-        }
+  useEffect(() => {
+    const isUser = async () => {
+      const currentSession = await getCurrentSession()
+      if (currentSession) await getCurrentUser()
     }
+    isUser()
+  }, [])
 
-    useEffect(() => {
-        const isUser = async () => {
-            const currentSession = await getCurrentSession()
+  const signOut = async () => {
+    await supabaseClient.auth.signOut()
+    clearUser()
+    router.push('/')
+  }
 
-            if (currentSession) await getCurrentUser()
-        }
-        isUser()
-    }, [])
+  const clearUser = () => {
+    setUser(null)
+    setId(null)
+    setEmail(null)
+    setName(null)
+    setPicture(null)
+  }
 
-    const signOut = async() => {
-        await supabaseClient.auth.signOut()
-        clearUser()
-        router.push('/')
-    }
+  const exposed = { user, id, email, name, picture, signOut };
 
-    const clearUser = () => {
-        setUser(null)
-        setId(null)
-        setEmail(null)
-        setName(null)
-        setPicture(null)
-    }
-
-    const exposed = { user, id, email, name, picture, signOut }
-
-    return <Context.Provider value={exposed}>{children}</Context.Provider>
-}
+  return <Context.Provider value={exposed}>{children}</Context.Provider>;
+};
 
 export const useUser = () => useContext(Context);
 
-export default Provider
+export default Provider;

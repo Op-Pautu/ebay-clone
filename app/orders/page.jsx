@@ -1,30 +1,35 @@
 "use client";
 
-import React from "react";
-import MainLayout from "../layouts/MainLayout";
-import { CiDeliveryTruck } from "react-icons/ci";
 import Link from "next/link";
+import { CiDeliveryTruck } from "react-icons/ci";
+import MainLayout from "../layouts/MainLayout";
+import { useUser } from "../context/user";
+import useIsLoading from "../hooks/useIsLoading";
+import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
+import moment from "moment";
 
 export default function Orders() {
-  const orders = [
-    {
-      id: 1,
-      stripe_id: "123123123",
-      name: "Test",
-      address: "Test",
-      zipcode: "Test",
-      city: "Test",
-      country: "Test",
-      total: 1299,
-      orderItem: [
-        {
-          id: 1,
-          title: "School Books",
-          url: "https://picsum.photos/id/20",
-        },
-      ],
-    },
-  ];
+  const { user } = useUser();
+  const [orders, setOrders] = useState([]);
+
+  const getOrders = async () => {
+    try {
+      if (!user && !user?.id) return;
+      const response = await fetch("/api/orders");
+      const result = await response.json();
+      setOrders(result);
+      useIsLoading(false);
+    } catch (error) {
+      toast.error("Something went wrong?", { autoClose: 3000 });
+      useIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    useIsLoading(true);
+    getOrders();
+  }, [user]);
 
   return (
     <>
@@ -38,15 +43,14 @@ export default function Orders() {
               <CiDeliveryTruck className="text-green-500" size={35} />
               <span className="pl-4">Orders</span>
             </div>
-
             {orders.length < 1 ? (
               <div className="flex items-center justify-center">
-                You have no order history.
+                You have no order history
               </div>
             ) : null}
 
             {orders.map((order) => (
-              <div className="text-sm pl-[50px]" key={order?.id}>
+              <div key={order?.id} className="text-sm pl-[50px]">
                 <div className="border-b py-1">
                   <div className="pt-2">
                     <span className="font-bold mr-2">Stripe ID:</span>
@@ -54,7 +58,7 @@ export default function Orders() {
                   </div>
 
                   <div className="pt-2">
-                    <span className="font-bold mr-2">Delivery Address</span>
+                    <span className="font-bold mr-2">Delivery Address:</span>
                     {order?.name}, {order?.address}, {order?.zipcode},{" "}
                     {order?.city}, {order?.country}
                   </div>
@@ -64,19 +68,29 @@ export default function Orders() {
                     {order?.total / 100}
                   </div>
 
+                  <div className="pt-2">
+                    <span className="font-bold mr-2">Order Created:</span>
+                    {moment(order?.created_at).calendar()}
+                  </div>
+
+                  <div className="py-2">
+                    <span className="font-bold mr-2">Delivery Time:</span>
+                    {moment(order?.created_at).add(3, "days").calendar()}
+                  </div>
+
                   <div className="flex items-center gap-4">
                     {order?.orderItem.map((item) => (
                       <div key={item.id} className="flex items-center">
                         <Link
                           className="py-1 hover:underline text-blue-500 font-bold"
-                          href=""
+                          href={`/product/${item.product_id}`}
                         >
                           <img
                             className="rounded"
                             width="120"
-                            src={item.url + "/120"}
+                            src={item.product.url + "/120"}
                           />
-                          {item.title}
+                          {item.product.title}
                         </Link>
                       </div>
                     ))}

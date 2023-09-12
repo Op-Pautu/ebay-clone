@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "prisma generate"
   },
   "prisma": {
     "seed": "node prisma/seed.js"
@@ -22,6 +23,7 @@
     "autoprefixer": "10.4.14",
     "cross-fetch": "^4.0.0",
     "debounce": "^1.2.1",
+    "encoding": "^0.1.13",
     "moment": "^2.29.4",
     "next": "13.4.13",
     "node-fetch": "^3.3.2",

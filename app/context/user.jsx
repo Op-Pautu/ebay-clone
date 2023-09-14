@@ -54,7 +54,6 @@ const Provider = ({ children }) => {
     clearUser();
     router.push("/");
   };
-
   const clearUser = () => {
     setUser(null);
     setId(null);

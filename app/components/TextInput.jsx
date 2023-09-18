@@ -1,25 +1,22 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-
-const TextInput = ({string, placeholder, error, onUpdate}) => {
+const TextInput = ({ string, placeholder, error, onUpdate }) => {
   return (
     <>
-       <input
+      <input
         placeholder={placeholder}
         className="w-full bg-white text-gray-800 border text-sm border-[#272727] p-3 placeholder-gray-500 focus:outline-none"
-        value={string || ''}
+        value={string || ""}
         onChange={(event) => onUpdate(event.target.value)}
         type="text"
         autoComplete="off"
-        
-       />
-        
-       <div className="text-red-500 text-[14px] font-semibold">
-            {error ? (error) : null}
-       </div>
-    </>
-  )
-}
+      />
 
-export default TextInput
+      <div className="text-red-500 text-[14px] font-semibold">
+        {error ? error : null}
+      </div>
+    </>
+  );
+};
+
+export default TextInput;

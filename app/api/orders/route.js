@@ -11,18 +11,17 @@ export async function GET() {
 
         if (!user) throw Error()
         
-        const orders = await prisma.orders.findMany({
-            where: { user_id: user?.id },
-            orderBy: { id: "desc" },
-            include: { 
-                orderItem: {
-                    include: {
-                        product: true
-                    }
+       const orders = await prisma.orders.findMany({
+        where: { user_id: user?.id},
+        orderBy: { id: "desc"},
+        include: {
+            orderItem: {
+                include: {
+                    product: true
                 }
-                
             }
-        })
+        }
+       }) 
         
         await prisma.$disconnect();
         return NextResponse.json(orders);

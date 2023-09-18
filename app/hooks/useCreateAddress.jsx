@@ -1,24 +1,23 @@
 const useCreateAddress = async (details) => {
-    
-    let url = 'create'
-    if (details.addressId) url = 'update'
+  let url = "create";
 
-    const response = await fetch(`/api/address/${url}`, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-            addressId: details.addressId,
-            name: details.name,
-            address: details.address,
-            zipcode: details.zipcode,
-            city: details.city,
-            country: details.country,
-        })
-    })
+  if (details.addressId) url = "update";
 
-    const data = await response.json();
+  const response = await fetch(`api/address/${url}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      addressId: details.addressId,
+      name: details.name,
+      address: details.address,
+      zipcode: details.zipcode,
+      city: details.city,
+      country: details.country,
+    }),
+  });
 
-    return data
-}
+  const data = await response.json();
+  return data;
+};
 
 export default useCreateAddress;

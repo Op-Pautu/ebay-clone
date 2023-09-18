@@ -58,11 +58,10 @@ const Provider = ({ children }) => {
   const cartCount = () => {
     let cart = [];
     if (typeof localStorage !== "undefined") {
-      cart = JSON.parse(localStorage.getItem("cart") || []);
+      cart = JSON.parse(localStorage.getItem("cart")) || [];
     }
     return cart.length;
   };
-
   const cartTotal = () => {
     let total = 0;
     let cart = [];

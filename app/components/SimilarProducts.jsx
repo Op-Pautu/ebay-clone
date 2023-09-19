@@ -15,14 +15,12 @@ const SimilarProducts = () => {
         setProducts(result);
         return;
       }
-
       setProducts([]);
     } catch (error) {
       console.log(error);
       alert(error);
     }
   };
-
   useEffect(() => {
     getRandomProducts();
   }, []);

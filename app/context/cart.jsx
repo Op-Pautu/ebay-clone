@@ -12,7 +12,6 @@ const Provider = ({ children }) => {
 
   const getCart = () => {
     let cart = [];
-
     if (typeof localStorage !== "undefined") {
       cart = JSON.parse(localStorage.getItem("cart")) || [];
     }
@@ -33,7 +32,7 @@ const Provider = ({ children }) => {
   const removeFromCart = (product) => {
     let cart = [];
     if (typeof localStorage !== "undefined") {
-      cart = JSON.parse(localStorage.getItem("cart") || []);
+      cart = JSON.parse(localStorage.getItem("cart")) || [];
     }
     cart = cart.filter((item) => item.id !== product.id);
     localStorage.setItem("cart", JSON.stringify(cart));
@@ -44,7 +43,7 @@ const Provider = ({ children }) => {
   const isItemAddedToCart = (product) => {
     let cart = [];
     if (typeof localStorage !== "undefined") {
-      cart = JSON.parse(localStorage.getItem("cart") || []);
+      cart = JSON.parse(localStorage.getItem("cart")) || [];
     }
     cart = cart.filter((item) => item.id === product.id);
 
@@ -52,6 +51,7 @@ const Provider = ({ children }) => {
       setIsItemAdded(true);
       return;
     }
+
     setIsItemAdded(false);
   };
 
@@ -62,14 +62,13 @@ const Provider = ({ children }) => {
     }
     return cart.length;
   };
+
   const cartTotal = () => {
     let total = 0;
     let cart = [];
-
     if (typeof localStorage !== "undefined") {
-      cart = JSON.parse(localStorage.getItem("cart") || []);
+      cart = JSON.parse(localStorage.getItem("cart")) || [];
     }
-
     for (let i = 0; i < cart.length; i++) {
       const element = cart[i];
       total += element.price;
@@ -98,4 +97,6 @@ const Provider = ({ children }) => {
 };
 
 export const useCart = () => useContext(Context);
+
 export default Provider;
+  

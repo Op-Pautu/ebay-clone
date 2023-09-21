@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import { BiLoaderCircle } from "react-icons/bi";
 import { AiOutlineSearch } from "react-icons/ai";
 import { debounce } from "debounce";
+
 const MainHeader = () => {
   const [items, setItems] = useState([]);
   const [isSearching, setIsSearching] = useState(null);
@@ -17,9 +18,9 @@ const MainHeader = () => {
     setIsSearching(true);
     try {
       const response = await fetch(
-        `api/products/search-by-name/${event.target.value}`
+        `/api/products/search-by-name/${event.target.value}`
       );
-      const result = response.json();
+      const result = await response.json();
       if (result) {
         setItems(result);
         setIsSearching(false);
@@ -36,11 +37,11 @@ const MainHeader = () => {
   return (
     <>
       <div id="MainHeader" className="border-b">
-        <div className="flex items-center justify-between w-full mx-auto max-w-[1200px]">
+        <nav className="flex items-center justify-between w-full mx-auto max-w-[1200px]">
           <div className="flex items-center w-full bg-white">
             <div className="flex lg:justify-start justify-between gap-10 max-w-[1150px] w-full px-3 py-5 mx-auto">
               <Link href="/">
-                <img src="/images/logo.svg" alt="logo" width={120} />
+                <img src="/images/logo.svg" alt="logo" />
               </Link>
               <div className="w-full">
                 <div className="relative">
@@ -49,11 +50,12 @@ const MainHeader = () => {
                       <button className="flex items-center">
                         <AiOutlineSearch size={22} />
                       </button>
+
                       <input
-                        className="w-full placeholder-gray-400 text-sm pl-3 focus:outline-none"
+                        className="w-full placeholder-gray-400text-sm pl-3 focus:outline-none"
+                        onChange={handleSearchName}
                         placeholder="Search for anything"
                         type="text"
-                        onChange={handleSearchName}
                       />
                       {isSearching ? (
                         <BiLoaderCircle
@@ -64,7 +66,7 @@ const MainHeader = () => {
 
                       {items.length > 0 ? (
                         <div className="absolute bg-white max-w-[910px] h-auto w-full z-20 left-0 top-12 border p-1">
-                          {items.map((item) => {
+                          {items.map((item) => (
                             <div className="p-1" key={item.id}>
                               <Link
                                 href={`/product/${item?.id}`}
@@ -73,7 +75,7 @@ const MainHeader = () => {
                                 <div className="flex items-center">
                                   <img
                                     className="rounded-md"
-                                    width={40}
+                                    width="40"
                                     src={item?.url + "/40"}
                                   />
                                   <div className="truncate ml-2">
@@ -84,8 +86,8 @@ const MainHeader = () => {
                                   ${(item?.price / 100).toFixed(2)}
                                 </div>
                               </Link>
-                            </div>;
-                          })}
+                            </div>
+                          ))}
                         </div>
                       ) : null}
                     </div>
@@ -100,7 +102,7 @@ const MainHeader = () => {
               </div>
             </div>
           </div>
-        </div>
+        </nav>
       </div>
     </>
   );

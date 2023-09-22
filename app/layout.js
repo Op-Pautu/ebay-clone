@@ -1,24 +1,23 @@
-import './globals.css'
-import { ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-import UserProvider from './context/user'
-import CartProvider from './context/cart'
+import "./globals.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import UserProvider from "./context/user";
+import CartProvider from "./context/cart";
 export const metadata = {
-  title: 'eBay Clone',
-  description: 'eBay Clone',
-}
-
+  title: "eBay Clone",
+  description: "eBay Clone",
+};
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <ToastContainer/>
+        <ToastContainer />
         <UserProvider>
-          <CartProvider>
-            {children}
-          </CartProvider>
+          <CartProvider>{children}</CartProvider>
         </UserProvider>
       </body>
     </html>
-  )
+  );
 }
